@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -22,16 +21,9 @@ func main() {
 	item := "05082022AxisReverseFile.xls"
 
 	downloader := s3manager.NewDownloader(sess)
-
-	file, err := os.Create("./abc.xls")
-	if err != nil {
-		log.Fatalf("Unable to open file %q, %v", item, err)
-	}
-
-	defer file.Close()
-
 	buf := aws.NewWriteAtBuffer([]byte{})
-	_, err = downloader.Download(buf,
+
+	_, err := downloader.Download(buf,
 		&s3.GetObjectInput{
 			Bucket: aws.String(bucket),
 			Key:    aws.String(item),
